@@ -1,0 +1,9 @@
+langchain==0.2.1
+langchain-community==0.2.1
+langchain-core==0.2.2rc1
+langchain-openai==0.1.8rc1
+langchain-text-splitters==0.2.0
+chromadb==0.5.0
+docx2txt==0.8
+unstructured==0.14.2
+selenium==4.21.0
