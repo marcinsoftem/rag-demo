@@ -3,6 +3,6 @@
 
 RAG jest techniką pozwalającą dostarcza modelom AI nowej wiedzy za pomocą rozszerzonych zapytań.
 
-![loader.png](img%2Floader.png)
+![loader.png](img/loader.png)
 
-![generator.png](img%2Fgenerator.png)
+![generator.png](img/generator.png)
