@@ -5,6 +5,8 @@ import os
 TMP_DIR = "tmp/"
 FILE_TYPES = ["pdf", "docx", "txt", "md"]
 
+os.makedirs(TMP_DIR, exist_ok=True)
+
 if "chroma_db" not in st.session_state:
     st.session_state["chroma_db"] = rag.connect_to_db()
 
