@@ -4,6 +4,8 @@ import os
 
 TMP_DIR = "tmp/"
 FILE_TYPES = ["pdf", "docx", "txt", "md"]
+OPENAI_API_KEY = st.secrets["openai"]["OPENAI_API_KEY"]
+OPENAI_BASE_URL = st.secrets["openai"]["OPENAI_BASE_URL"]
 
 os.makedirs(TMP_DIR, exist_ok=True)
 
@@ -51,5 +53,5 @@ with generator_tab:
                 valid = False
             else:
                 with st.spinner("Trwa przetwarzanie..."):
-                    answer = rag.retrieve(query)
+                    answer = rag.retrieve(query, OPENAI_API_KEY, OPENAI_BASE_URL)
                     st.write(answer.content)

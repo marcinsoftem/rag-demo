@@ -1,5 +1,4 @@
 import os
-import configparser
 from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.document_loaders import Docx2txtLoader
@@ -51,11 +50,6 @@ Opieraj swoją odpowiedź na faktach zawartych w DOKUMENCIE.
 Jeżeli DOKUMENT nie zawiera faktów pozwalających odpowiedzieć na PYTANIE, zwróć {none}.
 """
 
-config = configparser.ConfigParser()
-config.read(CONFIG_FILE)
-OPENAI_API_KEY = config[PROFIL]["OPENAI_API_KEY"]
-OPENAI_BASE_URL = config[PROFIL]["OPENAI_BASE_URL"]
-
 
 def connect_to_db() -> None:
     embeddings = SentenceTransformerEmbeddings(model_name=EMBEDING_MODEL)
@@ -85,6 +79,7 @@ def load_txt(file_path: str) -> None:
 def load_md(file_path: str) -> None:
     save_documents(UnstructuredMarkdownLoader(file_path).load())
 
+
 def load_url(url: str) -> None:
     save_documents(SeleniumURLLoader([url]).load())
 
@@ -109,14 +104,13 @@ def clean_up(chroma_db: Chroma, ids: list[str]) -> None:
     chroma_db.delete(ids)
 
 
-def retrieve(query: str) -> str:
+def retrieve(query: str, openai_api_key: str, base_url: str) -> str:
     db_chroma = connect_to_db()
     docs_chroma = db_chroma.similarity_search_with_score(query, k=5)
     context_text = "\n\n".join([doc.page_content for doc, _score in docs_chroma])
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE_3)
     prompt = prompt_template.format(context=context_text, question=query, none="Nie mam wiedzy na ten temat")
     print(prompt)
-    model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL, model=CHAT_MODEL)
+    model = ChatOpenAI(openai_api_key=openai_api_key, base_url=base_url, model=CHAT_MODEL)
     response_text = model.invoke(prompt)
     return response_text
-
